@@ -1,0 +1,26 @@
+{
+  "builders": [
+      {
+        "type": "googlecompute",
+        "project_id": "broadcom-symantec-email",
+        "source_image": "centos-7-v20200403",
+        "ssh_username": "packer",
+        "disk_size": "50",
+        "image_labels": {
+          "linux-image": "apache-centos"
+         },
+        "image_family": "packer-image",
+        "image_description": "This Image is created by Packer",
+        "zone": "us-central1-a",
+        "network": "projects/broadcom-symantec-email/global/networks/default",
+        "subnetwork": "projects/broadcom-symantec-email/regions/us-central1/subnetworks/default"
+      }
+  ],
+    
+  "provisioners": [
+      {
+        "type": "shell",
+        "script": "apache.sh"
+      }
+    ]
+  }
