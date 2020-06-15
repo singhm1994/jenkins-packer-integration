@@ -1,0 +1,13 @@
+steps:
+- name: 'gcr.io/broadcom-symantec-email/packer'
+  args:
+  - build
+  - -var
+  - image_name=centos-7-v20200403
+  - -var
+  - project_id=broadcom-symantec-email
+  - -var
+  - image_family=packer-image
+  - -var
+  - image_zone=us-central1-a
+  - packer-build.json
