@@ -11,3 +11,42 @@ steps:
   - -var
   - image_zone=us-central1-a
   - packer-build.json
+  
+# [START cloudbuild-trigger-cd]
+# This step clones the terraform-cb-gitops repository
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Clone terraform-cb-gitops repository
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    gcloud source repos clone terraform-cb-gitops && \
+    cd terraform-cb-gitops && \
+    git checkout master && \
+    git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
+
+# This step generates the new manifest
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Generate manifest
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+     sed "s/broadcom-symantec-email/${PROJECT_ID}/g" project.txt.tpl | \
+     sed "s/COMMIT_SHA/${SHORT_SHA}/g" > terraform-cb-gitops/project.txt
+
+# This step pushes the manifest back to terraform-cb-gitops
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Push manifest
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    set -x && \
+    cd terraform-cb-gitops && \
+    git add project.txt && \
+    git commit -m "Deploying image gcr.io/${PROJECT_ID}/terraform-cb-gitops:${SHORT_SHA}
+    Built from commit ${COMMIT_SHA} of repository terraform-cb-gitops
+    Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
+    git push origin master
+
