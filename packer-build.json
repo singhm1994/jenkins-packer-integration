@@ -3,7 +3,7 @@
       {
         "type": "googlecompute",
         "project_id": "broadcom-symantec-email",
-        "source_image": "centos-7-v20200403",
+        "source_image": "packer-1592313051",
         "ssh_username": "packer",
         "disk_size": "50",
         "image_labels": {
