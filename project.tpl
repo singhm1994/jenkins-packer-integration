@@ -1,2 +1,2 @@
-broadcom-symantec-email
+GOOGLE_CLOUD_PROJECT
 COMMIT_SHA
