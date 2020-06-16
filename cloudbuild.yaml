@@ -32,7 +32,7 @@ steps:
   args:
   - '-c'
   - |
-     sed "s/broadcom-symantec-email/${PROJECT_ID}/g" project.tpl | \
+     sed "s/broadcom-symantec-email/${PROJECT_ID}/g" project.txt | \
      sed "s/COMMIT_SHA/${SHORT_SHA}/g" > terraform-cb-gitops/project.txt
 
 # This step pushes the manifest back to terraform-cb-gitops
